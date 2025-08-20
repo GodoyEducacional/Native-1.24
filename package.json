@@ -2,6 +2,7 @@
   "name": "hamburguer",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "author": "Godoy",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -29,6 +30,7 @@
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-native": "0.79.5",
+    "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-reanimated": "~3.17.4",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.11.1",

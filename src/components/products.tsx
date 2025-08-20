@@ -39,7 +39,7 @@ export const Product = forwardRef<
           </Text>
 
           {data.quantity && (
-            <Text className="text-slate-100 font-subtitle text-base flex-1">
+            <Text className="text-slate-400 font-subtitle text-sm">
               x {data.quantity}
             </Text>
           )}
