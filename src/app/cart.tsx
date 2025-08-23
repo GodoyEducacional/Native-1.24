@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert } from "react-native";
+import { View, Text, ScrollView, Alert, Linking } from "react-native";
 
 import { Header } from "@/components/header";
 
@@ -18,8 +18,16 @@ import { Feather } from "@expo/vector-icons";
 
 import { LinkButton } from "@/components/link-button";
 
+import { useState } from "react";
+
+import { useNavigation } from "expo-router";
+
+const PHONE_NUMBER = "5519988414402";
+
 export default function Cart() {
+  const [address, setAddress] = useState("");
   const cartStore = useCartStore();
+  const navigation = useNavigation();
 
   const total = formatCurrency(
     cartStore.products.reduce(
@@ -38,6 +46,31 @@ export default function Cart() {
         onPress: () => cartStore.remove(product.id),
       },
     ]);
+  }
+
+  function handleOder() {
+    if (address.trim().length === 0) {
+      return Alert.alert("Atenção");
+    }
+
+    const products = cartStore.products
+      .map((product) => `\n ${product.quantity} ${product.title}`)
+      .join("");
+
+    const message = `
+    🍔 NOVO PEDIDO
+    \n Entregar em ${address}
+    
+    ${products}
+    
+    \n Valor total: ${total}`;
+
+    Linking.openURL(
+      `http://api.whatsapp.com/send?phone=${PHONE_NUMBER}&text=${message}`
+    );
+
+    cartStore.clear();
+    navigation.goBack();
   }
 
   return (
@@ -72,13 +105,19 @@ export default function Cart() {
               </Text>
             </View>
 
-            <Input placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento" />
+            <Input
+              placeholder="Informe o endereço de entrega com rua, bairro, CEP, número e complemento"
+              onChangeText={setAddress}
+              onSubmitEditing={handleOder} // Chama a função
+              submitBehavior="blurAndSubmit" // Muda o botao
+              returnKeyType="next" // Muda o icone
+            />
           </View>
         </ScrollView>
       </KeyboardAwareScrollView>
 
       <View className="p-5 gap-5">
-        <Button>
+        <Button onPress={handleOder}>
           <Button.Text>Enviar pedido</Button.Text>
           <Button.Icon>
             <Feather name="arrow-right-circle" size={20} />
